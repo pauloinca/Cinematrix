@@ -4,6 +4,7 @@ using CinematrixAPI.Models;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text.Json.Serialization;
+using Microsoft.EntityFrameworkCore;
 
 namespace CinematrixAPI.Controllers
 {
@@ -12,35 +13,44 @@ namespace CinematrixAPI.Controllers
     public class FilmeController : ControllerBase
     {
         private readonly IConfiguration _configuration;
+        private readonly CinematrixContext _context;
 
-        public FilmeController(IConfiguration configuration)
+        public FilmeController(IConfiguration configuration, CinematrixContext context)
         {
+            _context = context;
             _configuration = configuration;
         }
 
-        [HttpGet]        
-        public JsonResult Get()
+        //[HttpGet]
+        //public JsonResult Get()
+        //{
+        //    string query = @"  
+        //            select Id, Titulo from Filme";
+        //    DataTable table = new DataTable();
+        //    string sqlDataSource = _configuration.GetConnectionString("CinematrixAppCon");
+        //    SqlDataReader myReader;
+        //    using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+        //    {
+        //        myCon.Open();
+        //        using (SqlCommand myCommand = new SqlCommand(query, myCon))
+        //        {
+        //            myReader = myCommand.ExecuteReader();
+        //            table.Load(myReader); ;
+
+        //            myReader.Close();
+        //            myCon.Close();
+        //        }
+        //    }
+
+        //    return new JsonResult(table);
+        //}
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Filme>>> GetFilme()
         {
-            string query = @"  
-                    select Id, Titulo from Filme";
-            DataTable table = new DataTable();
-            string sqlDataSource = _configuration.GetConnectionString("CinematrixAppCon");
-            SqlDataReader myReader;
-            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
-            {
-                myCon.Open();
-                using (SqlCommand myCommand = new SqlCommand(query, myCon))
-                {
-                    myReader = myCommand.ExecuteReader();
-                    table.Load(myReader); ;
-
-                    myReader.Close();
-                    myCon.Close();
-                }
-            }
-
-            return new JsonResult(table);
-        }
+            Console.WriteLine("oie");
+            return await _context.Filmes.ToListAsync();
+        }        
 
         [HttpPost]
         public JsonResult Post(Filme filme)
@@ -74,7 +84,7 @@ namespace CinematrixAPI.Controllers
             string query = @"  
                     update Filme set   
                     Titulo = '" + filme.Titulo + @"'  
-                    where Id = " + filme.Id + @"   
+                    where Id = " + filme.FilmeId + @"   
                     ";
             DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("CinematrixAppCon");

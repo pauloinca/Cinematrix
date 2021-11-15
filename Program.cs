@@ -1,16 +1,22 @@
 using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json.Serialization;
+using Microsoft.EntityFrameworkCore;
+using CinematrixAPI.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var connectionString = builder.Configuration.GetConnectionString("CinematrixppCon");
+
 // Add services to the container.
+
+builder.Services.AddDbContext<CinematrixContext>(options => options.UseSqlServer(connectionString));
 
 //Enable CORS    
 builder.Services.AddCors(c =>
 {
     c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod()
      .AllowAnyHeader());
-});
+});      
 
 //JSON Serializer    
 builder.Services.AddControllersWithViews()
