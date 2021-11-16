@@ -21,6 +21,11 @@ namespace CinematrixAPI.Models
         public virtual DbSet<Sessao> Sessoes { get; set; } = null!;
         public virtual DbSet<Usuario> Usuarios { get; set; } = null!;
 
+        public void MarkAsModified(Filme item)
+        {
+            Entry(item).State = EntityState.Modified;
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Filme>(entity =>
