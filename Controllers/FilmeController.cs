@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CinematrixAPI.Controllers
 {
@@ -43,7 +44,7 @@ namespace CinematrixAPI.Controllers
         //    return new JsonResult(table);
         //}
 
-        [HttpGet]
+        [HttpGet, Authorize]
         public async Task<List<Filme>> GetFilmesOrderByTitulo()
         {
             var query = from b in _context.Filmes

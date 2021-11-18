@@ -2,6 +2,9 @@ using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using CinematrixAPI.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +29,23 @@ builder.Services.AddControllersWithViews()
     .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver
     = new DefaultContractResolver());
 
+//JWT
+builder.Services.AddAuthentication(opt => {
+    opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"))
+    };
+});
+
 builder.Services.AddControllers().AddNewtonsoftJson();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -43,6 +63,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
