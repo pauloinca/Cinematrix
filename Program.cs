@@ -8,10 +8,12 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var jwtKey = Encoding.ASCII.GetBytes(builder.Configuration["SecretJWT:Key"]);
 var connectionString = builder.Configuration.GetConnectionString("CinematrixppCon");
 
 // Add services to the container.
 
+//Database Context
 builder.Services.AddDbContext<CinematrixContext>(options => options.UseSqlServer(connectionString));
 
 //Enable CORS    
@@ -29,20 +31,21 @@ builder.Services.AddControllersWithViews()
     .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver
     = new DefaultContractResolver());
 
-//JWT
+//JWT configuration
 builder.Services.AddAuthentication(opt => {
     opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
 .AddJwtBearer(options =>
 {
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
     options.TokenValidationParameters = new TokenValidationParameters
     {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"))
+        IssuerSigningKey = new SymmetricSecurityKey(jwtKey),
+        ValidateIssuer = false,
+        ValidateAudience = false
     };
 });
 

@@ -44,6 +44,7 @@ namespace CinematrixAPI.Controllers
         //    return new JsonResult(table);
         //}
 
+        [Route("GetFilmesOrderByTitulo")]
         [HttpGet, Authorize]
         public async Task<List<Filme>> GetFilmesOrderByTitulo()
         {
@@ -54,6 +55,7 @@ namespace CinematrixAPI.Controllers
             return await Task.FromResult(query.ToList());            
         }
 
+        [Route("GetFilmes")]
         [HttpGet]
         public async Task<List<Filme>> GetFilmes()
         {
@@ -71,6 +73,8 @@ namespace CinematrixAPI.Controllers
 
             return filme;
         }
+
+
 
         //[HttpPost]
         //public JsonResult Post(Filme filme)
