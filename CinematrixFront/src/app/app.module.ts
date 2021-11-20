@@ -10,6 +10,7 @@ import { ShowEmpComponent } from './employee/show-emp/show-emp.component';
 import { AddEditEmpComponent } from './employee/add-edit-emp/add-edit-emp.component';
 
 import { HttpClientModule } from '@angular/common/http';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { HttpClientModule } from '@angular/common/http';
     ShowDepComponent,
     EmployeeComponent,
     ShowEmpComponent,
-    AddEditEmpComponent,    
+    AddEditEmpComponent,
+    HomeComponent,    
   ],
   imports: [
     BrowserModule,
