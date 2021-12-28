@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
   selector: 'app-home',
@@ -11,32 +12,25 @@ import { Router } from '@angular/router';
 export class HomeComponent implements OnInit {
   invalidLogin = false;
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router, private jwtHelper: JwtHelperService,) {
 
-  ngOnInit(): void {}
-
-  login(form: NgForm) {
-    const credentials = JSON.stringify(form.value);
-    this.http
-      .post('http://localhost:5212/api/auth/login', credentials, {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-        }),
-      })
-      .subscribe(
-        (response) => {
-          const token = (<any>response).token;
-          localStorage.setItem('jwt', token);
-          this.invalidLogin = false;
-          this.router.navigate(['/']);
-        },
-        (err) => {
-          this.invalidLogin = true;
-        }
-      );
   }
 
-  logOut() {
-    localStorage.removeItem('jwt');
+  // isUserAuthenticated() {
+  //   const token = localStorage.getItem("jwt");
+  //   if (token && !this.jwtHelper.isTokenExpired(token)) {
+  //     return true;
+  //   }
+  //   else {
+  //     return false;
+  //   }
+  // }
+
+  public logOut = () => {
+    localStorage.removeItem("jwt");
+  }
+
+  ngOnInit() {
+    // console.log(this.isUserAuthenticated());
   }
 }

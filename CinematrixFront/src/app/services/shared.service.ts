@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({
   providedIn: 'root',
@@ -8,7 +9,17 @@ import { Observable } from 'rxjs';
 export class SharedService {
   readonly APIUrl = 'http://localhost:5212/api';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private jwtHelper: JwtHelperService) { }
+
+  isUserAuthenticated(): Observable<boolean> {
+    const token = localStorage.getItem("jwt");
+    if (token && !this.jwtHelper.isTokenExpired(token)) {
+      return new Observable(obs => obs.next(true))
+    }
+    else {
+      return new Observable(obs => obs.next(false))
+    }
+  }
 
   getFilmeList(): Observable<any[]> {
     return this.http.get<any>(this.APIUrl + '/filme');
