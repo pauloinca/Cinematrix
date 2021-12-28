@@ -4,6 +4,8 @@ using CinematrixAPI.Models;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text.Json.Serialization;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CinematrixAPI.Controllers
 {
@@ -11,114 +13,146 @@ namespace CinematrixAPI.Controllers
     [ApiController]
     public class FilmeController : ControllerBase
     {
-        private readonly IConfiguration _configuration;
+        private readonly CinematrixContext _context;
 
-        public FilmeController(IConfiguration configuration)
+        public FilmeController(CinematrixContext context)
         {
-            _configuration = configuration;
+            _context = context;
         }
 
-        [HttpGet]        
-        public JsonResult Get()
+        //[HttpGet]
+        //public JsonResult Get()
+        //{
+        //    string query = @"  
+        //            select Id, Titulo from Filme";
+        //    DataTable table = new DataTable();
+        //    string sqlDataSource = _configuration.GetConnectionString("CinematrixAppCon");
+        //    SqlDataReader myReader;
+        //    using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+        //    {
+        //        myCon.Open();
+        //        using (SqlCommand myCommand = new SqlCommand(query, myCon))
+        //        {
+        //            myReader = myCommand.ExecuteReader();
+        //            table.Load(myReader); ;
+
+        //            myReader.Close();
+        //            myCon.Close();
+        //        }
+        //    }
+
+        //    return new JsonResult(table);
+        //}
+
+        [Route("GetFilmesOrderByTitulo")]
+        [HttpGet, Authorize]
+        public async Task<List<Filme>> GetFilmesOrderByTitulo()
         {
-            string query = @"  
-                    select Id, Titulo from Filme";
-            DataTable table = new DataTable();
-            string sqlDataSource = _configuration.GetConnectionString("CinematrixAppCon");
-            SqlDataReader myReader;
-            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
-            {
-                myCon.Open();
-                using (SqlCommand myCommand = new SqlCommand(query, myCon))
-                {
-                    myReader = myCommand.ExecuteReader();
-                    table.Load(myReader); ;
+            var query = from b in _context.Filmes
+                        orderby b.Titulo
+                        select b;
 
-                    myReader.Close();
-                    myCon.Close();
-                }
-            }
+            return await Task.FromResult(query.ToList());            
+        }
 
-            return new JsonResult(table);
+        [Route("GetFilmes")]
+        [HttpGet]
+        public async Task<List<Filme>> GetFilmes()
+        {
+            var query = from b in _context.Filmes
+                        select b;
+
+            return await Task.FromResult(query.ToList());            
         }
 
         [HttpPost]
-        public JsonResult Post(Filme filme)
+        public Filme AddFilme(Filme filme)
         {
-            string query = @"  
-                    insert into Filme values   
-                    ('" + filme.Titulo + @"')  
-                    ";
-            DataTable table = new DataTable();
-            string sqlDataSource = _configuration.GetConnectionString("CinematrixAppCon");
-            SqlDataReader myReader;
-            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
-            {
-                myCon.Open();
-                using (SqlCommand myCommand = new SqlCommand(query, myCon))
-                {
-                    myReader = myCommand.ExecuteReader();
-                    table.Load(myReader); ;
+            _context.Filmes.Add(filme);
+            _context.SaveChanges();
 
-                    myReader.Close();
-                    myCon.Close();
-                }
-            }
-
-            return new JsonResult("Added Successfully");
+            return filme;
         }
 
-        [HttpPut]
-        public JsonResult Put(Filme filme)
-        {
-            string query = @"  
-                    update Filme set   
-                    Titulo = '" + filme.Titulo + @"'  
-                    where Id = " + filme.Id + @"   
-                    ";
-            DataTable table = new DataTable();
-            string sqlDataSource = _configuration.GetConnectionString("CinematrixAppCon");
-            SqlDataReader myReader;
-            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
-            {
-                myCon.Open();
-                using (SqlCommand myCommand = new SqlCommand(query, myCon))
-                {
-                    myReader = myCommand.ExecuteReader();
-                    table.Load(myReader); ;
 
-                    myReader.Close();
-                    myCon.Close();
-                }
-            }
 
-            return new JsonResult("Updated Successfully");
-        }
+        //[HttpPost]
+        //public JsonResult Post(Filme filme)
+        //{
+        //    string query = @"  
+        //            insert into Filme values   
+        //            ('" + filme.Titulo + @"')  
+        //            ";
+        //    DataTable table = new DataTable();
+        //    string sqlDataSource = _configuration.GetConnectionString("CinematrixAppCon");
+        //    SqlDataReader myReader;
+        //    using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+        //    {
+        //        myCon.Open();
+        //        using (SqlCommand myCommand = new SqlCommand(query, myCon))
+        //        {
+        //            myReader = myCommand.ExecuteReader();
+        //            table.Load(myReader); ;
 
-        [HttpDelete("{id}")]
-        public JsonResult Delete(int id)
-        {
-            string query = @"  
-                    delete from Filme  
-                    where Id = " + id + @"   
-                    ";
-            DataTable table = new DataTable();
-            string sqlDataSource = _configuration.GetConnectionString("CinematrixAppCon");
-            SqlDataReader myReader;
-            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
-            {
-                myCon.Open();
-                using (SqlCommand myCommand = new SqlCommand(query, myCon))
-                {
-                    myReader = myCommand.ExecuteReader();
-                    table.Load(myReader); ;
+        //            myReader.Close();
+        //            myCon.Close();
+        //        }
+        //    }
 
-                    myReader.Close();
-                    myCon.Close();
-                }
-            }
+        //    return new JsonResult("Added Successfully");
+        //}
 
-            return new JsonResult("Deleted Successfully");
-        }
+        //[HttpPut]
+        //public JsonResult Put(Filme filme)
+        //{
+        //    string query = @"  
+        //            update Filme set   
+        //            Titulo = '" + filme.Titulo + @"'  
+        //            where Id = " + filme.FilmeId + @"   
+        //            ";
+        //    DataTable table = new DataTable();
+        //    string sqlDataSource = _configuration.GetConnectionString("CinematrixAppCon");
+        //    SqlDataReader myReader;
+        //    using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+        //    {
+        //        myCon.Open();
+        //        using (SqlCommand myCommand = new SqlCommand(query, myCon))
+        //        {
+        //            myReader = myCommand.ExecuteReader();
+        //            table.Load(myReader); ;
+
+        //            myReader.Close();
+        //            myCon.Close();
+        //        }
+        //    }
+
+        //    return new JsonResult("Updated Successfully");
+        //}
+
+        //[HttpDelete("{id}")]
+        //public JsonResult Delete(int id)
+        //{
+        //    string query = @"  
+        //            delete from Filme  
+        //            where Id = " + id + @"   
+        //            ";
+        //    DataTable table = new DataTable();
+        //    string sqlDataSource = _configuration.GetConnectionString("CinematrixAppCon");
+        //    SqlDataReader myReader;
+        //    using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+        //    {
+        //        myCon.Open();
+        //        using (SqlCommand myCommand = new SqlCommand(query, myCon))
+        //        {
+        //            myReader = myCommand.ExecuteReader();
+        //            table.Load(myReader); ;
+
+        //            myReader.Close();
+        //            myCon.Close();
+        //        }
+        //    }
+
+        //    return new JsonResult("Deleted Successfully");
+        //}
     }
 }
