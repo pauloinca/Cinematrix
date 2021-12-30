@@ -26,16 +26,25 @@ namespace CinematrixAPI.Controllers
         [HttpGet]
         public async Task<Usuario?> GetUsuario(Usuario user)
         {
-            var query = _context.Usuarios.Where(s => s.NomeUsuario == user.NomeUsuario && s.Senha == user.Senha).FirstOrDefault();
-
-            if (query == null)
+            try
             {
+                var query = _context.Usuarios.Where(s => s.NomeUsuario == user.NomeUsuario && s.Senha == user.Senha).FirstOrDefault();
+
+                if (query == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    return await Task.FromResult(query);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
                 return null;
             }
-            else
-            {
-                return await Task.FromResult(query);
-            }            
+          
         }
 
         [HttpPost]
@@ -44,9 +53,7 @@ namespace CinematrixAPI.Controllers
         public ActionResult<dynamic> Authenticate([FromBody] Usuario model)
         {
             // Recupera o usuário
-            var user = GetUsuario(model).Result;
-
-            Console.WriteLine(model.NomeUsuario);
+            var user = GetUsuario(model).Result;            
 
             // Verifica se o usuário existe
             if (model == null || user == null)
@@ -64,6 +71,32 @@ namespace CinematrixAPI.Controllers
                 user = user,
                 token = token
             };
+
+        }
+
+        [HttpGet]
+        [Route("getRole")]
+        [Authorize]
+        public async Task<Usuario?> GetRole(Usuario user)
+        {
+            try
+            {
+                var query = _context.Usuarios.Where(s => s.NomeUsuario == user.NomeUsuario && s.Senha == user.Senha).FirstOrDefault();
+
+                if (query == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    return await Task.FromResult(query);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return null;
+            }
 
         }
 
