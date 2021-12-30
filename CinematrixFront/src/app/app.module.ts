@@ -5,13 +5,15 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { HttpClientModule } from '@angular/common/http';
-import { HomeComponent } from './home/home.component';
+import { HomeComponent } from './components/home/home.component';
 import { AngularMaterialModule } from '../angular-material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { JwtModule } from "@auth0/angular-jwt";
 import { AuthenticationGuard } from './authentication.guard';
-import { LoginComponent } from './login/login.component';
+import { LoginComponent } from './components/login/login.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { authInterceptorProviders } from './helpers/auth.interceptor';
+import { LeftNavbarComponent } from './components/shared/left-navbar/left-navbar.component';
 
 export function tokenGetter() {
   return localStorage.getItem("jwt");
@@ -21,7 +23,8 @@ export function tokenGetter() {
   declarations: [
     AppComponent,
     HomeComponent,
-    LoginComponent
+    LoginComponent,
+    LeftNavbarComponent
   ],
   imports: [
     BrowserModule,
@@ -40,7 +43,8 @@ export function tokenGetter() {
     BrowserAnimationsModule
   ],
   providers: [
-    AuthenticationGuard
+    AuthenticationGuard,
+    authInterceptorProviders
   ],
   bootstrap: [
     AppComponent

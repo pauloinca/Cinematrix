@@ -36,14 +36,14 @@
       <h2>Log In</h2>
       <mat-error *ngIf="loginInvalid"> The username and password were not recognized </mat-error>
       <mat-form-field class="full-width-input">
-        <input matInput placeholder="Email" formControlName="nomeUsuario" required />
-        <mat-error> Please provide a valid email address </mat-error>
+        <input matInput placeholder="Usuário" formControlName="nomeUsuario" required />
+        <mat-error> Forneça um nome de usuário válido </mat-error>
       </mat-form-field>
       <mat-form-field class="full-width-input">
-        <input matInput type="password" placeholder="Password" formControlName="senha" required />
-        <mat-error> Please provide a valid password </mat-error>
+        <input matInput type="password" placeholder="Senha" formControlName="senha" required />
+        <mat-error> Forneça uma senha válida </mat-error>
       </mat-form-field>
-      <button mat-raised-button color="primary">Login</button>
+      <button mat-raised-button color="primary">Entrar</button>
     </form>
   </mat-card-content>
 </mat-card>

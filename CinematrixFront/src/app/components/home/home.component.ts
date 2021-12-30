@@ -26,10 +26,6 @@ export class HomeComponent implements OnInit {
   //   }
   // }
 
-  public logOut = () => {
-    localStorage.removeItem("jwt");
-  }
-
   ngOnInit() {
     // console.log(this.isUserAuthenticated());
   }
