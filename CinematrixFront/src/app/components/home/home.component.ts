@@ -10,7 +10,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  invalidLogin = false;
+  // invalidLogin = false;
 
   constructor(private http: HttpClient, private router: Router, private jwtHelper: JwtHelperService,) {
 

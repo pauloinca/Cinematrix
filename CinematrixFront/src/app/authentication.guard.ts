@@ -10,7 +10,7 @@ import { TokenStorageService } from './services/token-storage.service';
 })
 export class AuthenticationGuard implements CanActivate {
 
-  private roles: string[] = [];
+  private role: string[] = [];
 
   constructor(private router: Router, private auth: AuthService,
     private tokenStorage: TokenStorageService) {
@@ -21,10 +21,15 @@ export class AuthenticationGuard implements CanActivate {
 
     if (token) {
       const user = this.tokenStorage.getUser();
-      this.roles = user.user.NivelAcesso;
+      console.log(user);
+      this.role = user.NivelAcesso;
       const allowedRoles = next.data.allowedRoles;
-      if (allowedRoles.includes(this.roles))
+      console.log("roles" + this.role);
+      console.log("allowed:" + allowedRoles);
+      if (allowedRoles.includes(this.role)) {
+        console.log("trueee");
         return true;
+      }
     }
 
     this.router.navigate(["login"]);

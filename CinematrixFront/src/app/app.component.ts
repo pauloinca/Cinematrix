@@ -15,12 +15,11 @@ export class AppComponent {
   roles: string[] = [];
 
   async logout(): Promise<void> {
-    localStorage.removeItem("jwt");
+    this.tokenStorage.signOut();
     window.location.reload();
 
   }
   async login(): Promise<void> {
-    // localStorage.removeItem("jwt");
     this.router.navigate(['/login']).then(() => {
       window.location.reload();
     });
@@ -34,8 +33,8 @@ export class AppComponent {
   }
 
   ngOnInit() {
-    console.log("app-component ngOnInit");
-    console.log("token: " + this.tokenStorage.getToken() + "\n\n");
+    // console.log("app-component ngOnInit");
+    // console.log("token: " + this.tokenStorage.getToken() + "\n\n");
     if (this.tokenStorage.getToken()) {
       // console.log(this.tokenStorage.getToken());
       this.isAuthenticated = true;

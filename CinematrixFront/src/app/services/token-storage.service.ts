@@ -29,7 +29,7 @@ export class TokenStorageService {
   }
 
   public getUser(): any {
-    return JSON.parse(localStorage.getItem(USER_KEY)!);
+    return JSON.parse(window.localStorage.getItem(USER_KEY)!);
   }
 
 }

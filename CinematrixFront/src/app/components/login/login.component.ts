@@ -68,17 +68,13 @@ export class LoginComponent implements OnInit {
         this.tokenStorage.saveToken(data.token);
         this.tokenStorage.saveUser(data.user);
         this.invalidLogin = false;
-        // this.isLoginFailed = false;
-        // this.isLoggedIn = true;
         this.roles = this.tokenStorage.getUser().NivelAcesso;
-        // console.log(this.roles);
-        // this.reloadPage();
+        this.router.navigate(["/home"]);
+        this.reloadPage();
       },
       err => {
-        console.log(err);
         this.loginInvalid = true;
         // this.errorMessage = err.error.message;
-        // this.isLoginFailed = true;
       }
     );
   }
