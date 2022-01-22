@@ -31,21 +31,30 @@
 </form> -->
 
 <mat-card>
-  <mat-card-content>
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      <h2>Log In</h2>
-      <mat-error *ngIf="loginInvalid"> The username and password were not recognized </mat-error>
-      <mat-form-field class="full-width-input">
-        <input matInput placeholder="Usuário" formControlName="nomeUsuario" required />
-        <mat-error> Forneça um nome de usuário válido </mat-error>
-      </mat-form-field>
-      <mat-form-field class="full-width-input">
-        <input matInput type="password" placeholder="Senha" formControlName="senha" required />
-        <mat-error> Forneça uma senha válida </mat-error>
-      </mat-form-field>
-      <button mat-raised-button color="primary">Entrar</button>
-    </form>
-  </mat-card-content>
+  <mat-tab-group mat-align-tabs="center" dynamicHeight>
+    <mat-card-content>
+      <mat-tab label="Entrar">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <!-- <h2>Login</h2> -->
+          <mat-form-field id="first-form">
+            <input matInput placeholder="Usuário" formControlName="nomeUsuario" required />
+            <mat-error> Forneça um nome de usuário válido </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="password" placeholder="Senha" formControlName="senha" required />
+            <mat-error> Forneça uma senha válida </mat-error>
+          </mat-form-field>
+          <mat-error *ngIf="loginInvalid"> O usuário e senha não foram encontrados </mat-error>
+          <button mat-raised-button color="primary">Entrar</button>
+        </form>
+      </mat-tab>
+    </mat-card-content>
+    <mat-card-content>
+      <mat-tab label="Registrar"> Content 2 </mat-tab>
+    </mat-card-content>
+  </mat-tab-group>
 </mat-card>
 
-<router-outlet></router-outlet>
+<mat-tab label="Third"> ab </mat-tab>
+
+<!-- <router-outlet></router-outlet> -->
