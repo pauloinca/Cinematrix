@@ -14,6 +14,9 @@ import { LoginComponent } from './components/login/login.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { authInterceptorProviders } from './helpers/auth.interceptor';
 import { LeftNavbarComponent } from './components/shared/left-navbar/left-navbar.component';
+import { SalasComponent } from './salas/salas.component';
+import { FilmesComponent } from './filmes/filmes.component';
+import { SessoesComponent } from './sessoes/sessoes.component';
 
 export function tokenGetter() {
   return localStorage.getItem("jwt");
@@ -24,7 +27,10 @@ export function tokenGetter() {
     AppComponent,
     HomeComponent,
     LoginComponent,
-    LeftNavbarComponent
+    LeftNavbarComponent,
+    SalasComponent,
+    FilmesComponent,
+    SessoesComponent
   ],
   imports: [
     BrowserModule,
